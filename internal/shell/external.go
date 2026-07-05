@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 )
@@ -11,7 +12,8 @@ func Run(cmd string, args []string) error {
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
 	if err := c.Run(); err != nil {
-		return err
+		fmt.Printf("rune: command not found: %s\n", cmd)
+		return nil
 	}
 	return nil
 }
