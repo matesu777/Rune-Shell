@@ -7,8 +7,6 @@ Um shell feito em Go
 ## Como rodar?
 
 ```bash
-
-```bash
 ./shell.sh
 ```
 
