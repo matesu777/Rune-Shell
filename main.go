@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/matesu777/Rune/internal/builtin"
+	"github.com/matesu777/Rune/internal/parser"
 	"github.com/matesu777/Rune/internal/shell"
 )
 
@@ -18,25 +18,33 @@ func main() {
 		Registry: reg,
 	}
 
-	reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewScanner(os.Stdin)
 
 	for {
+
 		fmt.Print("$ ")
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error reading input:", err)
+
+		reader.Scan()
+
+		input := reader.Text()
+
+		lex := parser.NewLexer(input)
+
+		p := parser.NewParser(lex)
+
+		cmd := p.ParseCommand()
+
+		if cmd.Name == "" {
 			continue
 		}
 
-		args := strings.Fields(input)
+		err := sh.Execute(cmd)
 
-		cmd := shell.Command{
-			Name: args[0],
-			Args: args[1:],
+		if err != nil {
+			fmt.Println(err)
 		}
-
-		if err := sh.Execute(cmd); err != nil {
-			fmt.Fprintln(os.Stderr, err)
+		if err := reader.Err(); err != nil {
+			fmt.Println("erro lendo entrada:", err)
 		}
 	}
 }
