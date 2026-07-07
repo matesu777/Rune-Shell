@@ -12,5 +12,5 @@ Um shell feito em Go
 
 ### TODO
 - [X] Builtin
-- [ ] Lexador
-- [ ] Parser
+- [x] Lexador
+- [x] Parser
